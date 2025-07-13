@@ -5,6 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 
 class StoreCategoryRequest extends FormRequest
 {
@@ -25,7 +28,8 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             "name" => "required|string|max:50|unique:categories,name",
-            "status" => "required|string|in:active,inactive"
+            "status" => "required|string|in:active,inactive",
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
@@ -56,5 +60,33 @@ class StoreCategoryRequest extends FormRequest
             'message' => 'Validation failed',
             'errors' => $validator->errors(),
         ], 422));
+    }
+
+    /**
+     * Upload image without processing.
+     *
+     * @param \Illuminate\Http\UploadedFile|null $image
+     * @return string|null Public URL of saved image or null if no image.
+     */
+    public function uploadImage($image): ?string
+    {
+        if ($image && $image->isValid()) {
+            // Generate a unique filename
+            $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
+
+            // Read and crop/resize the image using Intervention
+            $processedImage = Image::read($image)
+                ->cover(90, 90) // Resize to 300x300 pixels
+                // ->crop(300, 300, 50, 50) // Or optionally crop
+                ->encodeByExtension($image->getClientOriginalExtension(), quality: 80);
+
+            // Save to public disk
+            Storage::disk('public')->put("images/{$filename}", $processedImage);
+
+            // Return the public URL
+            return asset("storage/images/{$filename}");
+        }
+
+        return null;
     }
 }

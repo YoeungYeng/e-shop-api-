@@ -14,8 +14,8 @@ class CategoryController extends Controller
     public function index(Category $category)
     {
         try {
-             $data = $category::orderBy('created_at', 'desc')->get();
-            
+            $data = $category::orderBy('created_at', 'desc')->get();
+
             // return succefully
             return response()->json([
                 "status" => 200,
@@ -36,6 +36,10 @@ class CategoryController extends Controller
         try {
             // validate data
             $data = $request->validated();
+
+            if ($request->hasFile("image")) {
+                $data["image"] = $request->uploadImage($request->file("image"));
+            }
             // save data to data
             $category = Category::create($data);
             // return json
@@ -74,7 +78,8 @@ class CategoryController extends Controller
         }
     }
     // destroy
-    public function destroy($id){
+    public function destroy($id)
+    {
         $category = Category::findOrFail($id);
         $category->delete();
         return response()->json([
@@ -82,6 +87,27 @@ class CategoryController extends Controller
             "message" => "category delete fully",
             "data" => $category
         ], 200);
+    }
+
+    // get all products
+    public function getCategory(Category $category)
+    {
+        try {
+            $data = $category::orderBy('created_at', 'desc')->get();
+
+            // return succefully
+            return response()->json([
+                "status" => 200,
+                "message" => "all category",
+                "data" => $data
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                "status" => 500,
+                "message" => "external server error"
+            ], 500);
+        }
     }
 
 }

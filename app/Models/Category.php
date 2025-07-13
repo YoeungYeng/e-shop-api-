@@ -12,7 +12,7 @@ class Category extends Model
     use HasFactory, HasApiTokens;
     // table category
     protected $table = "categories";
-    protected $fillable = ['name', 'status'];
+    protected $fillable = ['name', 'status', 'image'];
 
     // related to proudct
     public function products(){
