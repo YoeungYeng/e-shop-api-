@@ -23,8 +23,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'facebook_id',
-        'facebook_token'
+        
     ];
 
     /**
@@ -72,4 +71,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function favoriteProducts()
+    {
+        return $this->belongsToMany(products::class, 'favorites', 'user_id', 'product_id');
+    }
+
 }

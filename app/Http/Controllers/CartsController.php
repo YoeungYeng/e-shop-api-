@@ -5,62 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\Carts;
 use App\Http\Requests\StoreCartsRequest;
 use App\Http\Requests\UpdateCartsRequest;
+use Illuminate\Http\Request;
 
 class CartsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function addToCart(Request $request)
     {
-        //
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        // Check for existing item
+        $cartItem = Carts::where('user_id', $data['user_id'])
+            ->where('product_id', $data['product_id'])
+            ->first();
+
+        if ($cartItem) {
+            $cartItem->quantity += $data['quantity'];
+            $cartItem->save();
+        } else {
+            $cartItem = Carts::create($data);
+        }
+
+        return response()->json([
+            'message' => 'Item added to cart successfully',
+            'data' => $cartItem
+        ], 201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCartsRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Carts $carts)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Carts $carts)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCartsRequest $request, Carts $carts)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Carts $carts)
-    {
-        //
-    }
 }
