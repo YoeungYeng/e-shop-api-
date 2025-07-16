@@ -7,6 +7,7 @@ use App\Http\Controllers\API\ProductsController;
 use App\Http\Controllers\API\SocialAuthController;
 use App\Http\Controllers\CartsController;
 use App\Http\Controllers\fronted\ProductsController as FrontedProductsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +31,11 @@ Route::middleware(['jwt.auth', 'checkUser'])->group(function () {
     // add to favorite
     Route::post('/favorites/{productId}', [FavoriteController::class, 'addToFavorites']);
     Route::get('/getAllfavorites', [FavoriteController::class, 'getFavorites']);
-
+    // remove from favorite
+    Route::delete('/favorites/{productId}', [FavoriteController::class, 'removeFromFavorites']);
+    // get cart
+    // get user profile
+    Route::get('/profile', [UserController::class, 'profile']);
 });
 
 // authentication JWT

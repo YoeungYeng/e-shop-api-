@@ -5,6 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class UpdateProductsRequest extends FormRequest
 {
@@ -33,13 +36,26 @@ class UpdateProductsRequest extends FormRequest
         ];
     }
 
-    public function uploadImage($image)
+    public function uploadImage($image): ?string
     {
-        if ($image) {
-            $imagePath = $image->store('images', 'public'); // Store in storage/app/public/images
-            return asset('storage/' . $imagePath); // Convert to URL
+        if ($image && $image->isValid()) {
+            // Generate a unique filename
+            $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
+
+            // Read and crop/resize the image using Intervention
+            $processedImage = Image::read($image)
+                ->resize(300, 300) // Resize to 300x300 pixels
+                // ->crop(300, 300, 50, 50) // Or optionally crop
+                ->encodeByExtension($image->getClientOriginalExtension(), quality: 80);
+
+            // Save to public disk
+            Storage::disk('public')->put("images/{$filename}", $processedImage);
+
+            // Return the public URL
+            return asset("storage/images/{$filename}");
         }
-        return null; // Return null if no image is provided
+
+        return null;
     }
 
     protected function failedValidation(Validator $validator)

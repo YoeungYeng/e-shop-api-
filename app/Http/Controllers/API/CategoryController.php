@@ -63,6 +63,9 @@ class CategoryController extends Controller
 
             $update_category = Category::findOrFail($id);
             $data = $request->validated();
+            if ($request->hasFile("image")) {
+                $data["image"] = $request->uploadImage($request->file("image"));
+            }
             $update_category->update($data);
             return response()->json([
                 "status" => 200,

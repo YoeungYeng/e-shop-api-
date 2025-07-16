@@ -45,4 +45,21 @@ class FavoriteController extends Controller
         $favorites = $user->favoriteProducts()->get();
         return response()->json(['favorites' => $favorites], 200);
     }
+
+    // Remove a product from favorites
+    public function removeFromFavorites(Request $request, $productId)
+    {
+        $user = $request->user();  // Get the authenticated user
+        // Check if already favorited
+        if (!$user->favoriteProducts()->where('product_id', $productId)->exists()) {
+            return response()->json(['message' => 'Product not in favorites'], 400);
+        }
+        // Remove from favorites
+        $user->favoriteProducts()->detach($productId);
+        return response()->json([
+            'message' => 'Product removed from favorites',
+            'data' => $productId
+        ], 200);
+    }
+
 }
