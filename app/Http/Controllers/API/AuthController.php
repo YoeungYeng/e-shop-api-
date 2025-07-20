@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -114,7 +115,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 201,
                 'user' => $user,
-                'access_token' => $token,
+                // 'access_token' => $token,
                 'token_type' => 'Bearer'
             ], 201);
 
@@ -200,4 +201,6 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    
 }

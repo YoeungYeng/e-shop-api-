@@ -71,4 +71,22 @@ class ProductsController extends Controller
             ], 500);
         }
     }
+
+    // count product
+    public function countProduct(Products $products){
+        try {
+            $count = $products::count();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Product count',
+                'value' => ['count' => $count]
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "status" => 500,
+                "message" => "external server error",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
 }

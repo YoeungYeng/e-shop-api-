@@ -22,7 +22,19 @@ class StoreOrdersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => 'required|exists:users,id',
+            'total' => 'required|numeric|min:0',
+            'status' => 'required|string|in:pending,completed,cancelled',
+        ];
+    }
+
+    // artribute for the request
+    public function attributes(): array
+    {
+        return [
+            'user_id' => 'User ID',
+            'total' => 'Total Amount',
+            'status' => 'Order Status',
         ];
     }
 }

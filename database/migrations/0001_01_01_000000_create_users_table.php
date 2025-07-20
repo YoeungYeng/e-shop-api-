@@ -15,9 +15,15 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->enum('role', ['admin', 'customer'])->default('customer');
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->string('district')->nullable();
+            $table->string('province')->nullable();
+            $table->string('country')->nullable();
+            // image circles
+            $table->string('image')->nullable(); 
             $table->timestamp('email_verified_at')->nullable();
             // facebook
-           
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

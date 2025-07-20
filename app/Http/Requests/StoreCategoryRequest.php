@@ -29,7 +29,7 @@ class StoreCategoryRequest extends FormRequest
         return [
             "name" => "required|string|max:50|unique:categories,name",
             "status" => "required|string|in:active,inactive",
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
@@ -50,6 +50,7 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name' => 'category name',
             'status' => 'category status',
+            'image' => 'category image',
         ];
     }
     // custom response

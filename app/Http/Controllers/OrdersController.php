@@ -30,8 +30,7 @@ class OrdersController extends Controller
      */
     public function store(StoreOrdersRequest $request)
     {
-        // validate order 
-        $validate = Validator::make($request->all(), []);
+        
     }
 
     /**

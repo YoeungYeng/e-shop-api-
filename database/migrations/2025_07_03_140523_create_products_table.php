@@ -19,6 +19,9 @@ return new class extends Migration {
             $table->enum("status", ["active", "inactive"]);
             // category_id foregin key
             $table->foreignId("category_id")->constrained('categories')->onDelete('cascade');
+            // user_id foreign key
+            $table->foreignId("user_id")->constrained('users')->onDelete('cascade');
+            // timestamps
             $table->timestamps();
         });
     }

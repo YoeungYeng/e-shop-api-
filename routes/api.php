@@ -27,7 +27,11 @@ Route::middleware(['jwt.auth', 'checkUser'])->group(function () {
     // get all category
     Route::get("getcategory", [CategoryController::class, 'getCategory']);
     // add to cart
-    Route::post("/cart", [CartsController::class, "addToCart"]);
+    Route::post("/cart", [CartsController::class, "increaseQuantity"]);
+    // remove from cart
+    Route::post("/cart/decrease", [CartsController::class, "decreaseQuantity"]);
+    // get cart items
+    Route::get("/cart", [CartsController::class, "getCartItems"]);
     // add to favorite
     Route::post('/favorites/{productId}', [FavoriteController::class, 'addToFavorites']);
     Route::get('/getAllfavorites', [FavoriteController::class, 'getFavorites']);
@@ -36,7 +40,12 @@ Route::middleware(['jwt.auth', 'checkUser'])->group(function () {
     // get cart
     // get user profile
     Route::get('/profile', [UserController::class, 'profile']);
+    // update user profile
+    Route::post('/profile', [UserController::class, 'updateProfile']);
+    // count products
+    Route::get('/count', [FrontedProductsController::class, 'countProduct']);
 });
+
 
 // authentication JWT
 Route::post("/login", [AuthController::class, "login"]);
