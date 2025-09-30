@@ -9,6 +9,8 @@ use App\Models\Products;
 use Exception;
 use Illuminate\Http\Request;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ProductsController extends Controller
 {
     /**
@@ -23,7 +25,7 @@ class ProductsController extends Controller
             return response()->json([
                 "status" => 200,
                 "message" => "all products",
-                "data" => $data
+                "products" => $data
             ], 200);
 
         } catch (Exception $e) {
@@ -103,14 +105,22 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Products $products)
+    public function destroy(string $id)
     {
         try {
-
+            $products = Products::find($id);
+            // check if the product exists
+            if(!$products) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Products not found',
+                ], 404);
+            }
             $products->delete();
             return response()->json([
                 'status' => 200,
-                'message' => 'News article deleted successfully',
+                'message' => 'deleted successfully',
+                
             ], 200);
         } catch (Exception $e) {
             return response()->json([

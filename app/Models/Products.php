@@ -20,7 +20,7 @@ class Products extends Model
         "stock",
         "status",
         "category_id",
-        "user_id"
+        
     ];
 
     public function category(){

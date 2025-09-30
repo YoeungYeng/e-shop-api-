@@ -13,12 +13,19 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained("users")->onDelete("cascade");
+            $table->foreignId("user_id")->constrained()->onDelete('cascade');
             $table->decimal('subTotal', 10, 2);
             $table->decimal("grand_total", 10, 2);
             $table->decimal("shipping", 10, 2);
             $table->decimal("discount", 10, 2)->nullable();
-            $table->enum("status", ["pending", "paid"]);
+            $table->enum('payment_status', ['paid' , 'no paid'])->default(("no paid"));
+            $table->enum('status', ['pending', 'shipped', 'delivered', 'canceled'])->default('pending');
+            $table->string('name');
+            $table->string('email');
+            $table->string('mobile');
+            $table->string('address');
+            $table->string('city');
+            $table->string('zip');
             $table->timestamps();
         });
     }

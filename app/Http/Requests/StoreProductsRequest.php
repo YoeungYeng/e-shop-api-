@@ -34,7 +34,7 @@ class StoreProductsRequest extends FormRequest
             'stock' => 'required|integer',
             'status' => 'required|in:active,inactive',
             'category_id' => 'required|exists:categories,id',
-            'user_id' => 'required|exists:users,id',
+
         ];
     }
 

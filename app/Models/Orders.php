@@ -12,7 +12,21 @@ class Orders extends Model
     use HasFactory, HasApiTokens;
     protected $table = "orders";
     protected $fillable = [
-        "user_id", "total", "status"
+        'user_id',
+        'status',
+        'subTotal',
+        'grand_total',
+        'shipping',
+        'discount',
+        'payment_status',
+        'email',
+        'name',
+        'mobile',
+        'address',
+        'city',
+        'zip',
+        'created_at',
+        'updated_at'
     ];
     // user integration with orders
     public function users(){

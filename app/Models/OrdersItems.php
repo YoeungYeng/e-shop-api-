@@ -12,6 +12,9 @@ class OrdersItems extends Model
     use HasFactory, HasApiTokens;
     protected $table = "orders_items";
     // products
+    protected $fillable = [
+        'order_id', 'product_id', 'quantity', 'price'
+    ];
     public function products()
     {
         return $this->hasMany(Products::class);

@@ -7,6 +7,7 @@ use App\Http\Controllers\API\ProductsController;
 use App\Http\Controllers\API\SocialAuthController;
 use App\Http\Controllers\CartsController;
 use App\Http\Controllers\fronted\ProductsController as FrontedProductsController;
+use App\Http\Controllers\NoticationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,8 @@ Route::middleware(['jwt.auth', 'checkUser'])->group(function () {
     Route::post('/profile', [UserController::class, 'updateProfile']);
     // count products
     Route::get('/count', [FrontedProductsController::class, 'countProduct']);
+    // get notifications
+    Route::get('/notifications', [NoticationController::class, 'getNotifications']);
 });
 
 
